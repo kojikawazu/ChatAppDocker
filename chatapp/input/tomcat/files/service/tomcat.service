@@ -1,0 +1,16 @@
+[Unit]
+Description=apache-tomcat-9.0.64
+ConditionPathExists=/var/tomcat
+
+[Service]
+User=tomcat
+Group=tomcat
+Type=oneshot
+
+ExecStart=/var/tomcat/bin/catalina.sh start
+ExecStop=/var/tomcat/bin/catalina.sh stop
+Restart=no
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

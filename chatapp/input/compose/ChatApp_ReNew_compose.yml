@@ -1,0 +1,38 @@
+version: '3.7'
+
+services:
+  nginx:
+    container_name: chatappnginx
+    build: ./nginx
+    image: chatapp-nginx:1
+    ports:
+      - "8080:80"
+      - "8081:3000"
+  tomcat:
+    container_name: chatapptomcat
+    hostname: chatapptomcat
+    build: ./tomcat
+    image: chatapp-tomcat:1
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  db:
+    container_name: chatappsqldb
+    hostname: chatappsqldb
+    build: ./db
+    image: chatapp-sqldb:1
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - ./db/data:/var/lib/mysql
+  adminer:
+    container_name: myadminer
+    hostname: myadminer
+    image: adminer:4.7.5
+    restart: always
+    ports:
+      - "8089:8080"
+    depends_on:
+      - db
